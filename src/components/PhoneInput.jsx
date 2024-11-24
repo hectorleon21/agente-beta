@@ -1,9 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { ChevronDown, Phone, HeadsetIcon, Users2, ShoppingBag } from 'lucide-react';
-// import { DiegoAvatar } from './avatars/DiegoAvatar';
-import { useEffect } from 'react';
 import { scroller } from 'react-scroll';
-
 
 const countryCodes = [
   // América del Sur
@@ -19,6 +16,7 @@ const countryCodes = [
     acronym: 'BO',
     flag: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 24"><rect width="36" height="8" fill="#D52B1E"/><rect y="8" width="36" height="8" fill="#F9E300"/><rect y="16" width="36" height="8" fill="#007934"/></svg>
   },
+  
   {
     code: '+56',
     country: 'Chile',
@@ -117,13 +115,7 @@ const countryCodes = [
     acronym: 'ES',
     flag: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 24"><rect width="36" height="24" fill="#C60B1E"/><rect y="6" width="36" height="12" fill="#FFC400"/></svg>
   },
-  {
-    code: '+240',
-    country: 'Guinea Ecuatorial',
-    acronym: 'GQ',
-    flag: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 24"><rect width="36" height="8" fill="#3E9A00"/><rect y="8" width="36" height="8" fill="#fff"/><rect y="16" width="36" height="8" fill="#E32118"/><rect width="12" height="24" fill="#0073CE"/></svg>
-  }
-].sort((a, b) => a.country.localeCompare(b.country));
+];
 
 const roles = [
   {
@@ -147,8 +139,8 @@ const roles = [
 ];
 
 const employeeAvatars = [
-// Ventas
-{
+  // Ventas
+  {
     id: 's1',
     name: 'Diego',
     experience: '5 años',
@@ -195,226 +187,210 @@ const employeeAvatars = [
 ];
 
 const PhoneInput = () => {
-const [fullName, setFullName] = useState('');
-const [selectedCountry, setSelectedCountry] = useState(countryCodes[0]);
-const [phoneNumber, setPhoneNumber] = useState('');
-const [isOpen, setIsOpen] = useState(false);
-const [error, setError] = useState('');
-const [selectedRole, setSelectedRole] = useState(null);
-const [selectedEmployee, setSelectedEmployee] = useState(null);
-const [hasSelectedRole, setHasSelectedRole] = useState(false);
-const assistantSelectRef = useRef(null);
+  const [fullName, setFullName] = useState('');
+  const [selectedCountry, setSelectedCountry] = useState(countryCodes[0]);
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [isOpen, setIsOpen] = useState(false);
+  const [error, setError] = useState('');
+  const [selectedRole, setSelectedRole] = useState(null);
+  const [selectedEmployee, setSelectedEmployee] = useState(null);
+  const [hasSelectedRole, setHasSelectedRole] = useState(false);
+  const assistantSelectRef = useRef(null);
 
-useEffect(() => {
-  if (hasSelectedRole && assistantSelectRef.current) {
-    assistantSelectRef.current.scrollIntoView({
-      behavior: 'smooth',
-      block: 'start',
-    });
-  }
-}, [hasSelectedRole]);
+  useEffect(() => {
+    if (hasSelectedRole && assistantSelectRef.current) {
+      assistantSelectRef.current.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+    }
+  }, [hasSelectedRole]);
 
-const handleRoleSelect = (role) => {
-  setSelectedRole(role.id);
-  setHasSelectedRole(true);
-};
+  const handleRoleSelect = (role) => {
+    setSelectedRole(role.id);
+    setHasSelectedRole(true);
+  };
 
-const handlePhoneChange = (e) => {
-  const value = e.target.value.replace(/[^\d]/g, '');
-  setPhoneNumber(value);
-  validatePhone(value);
-  if (selectedRole) {
-    const assistantSelect = document.getElementById('assistant-select');
-    assistantSelect.scrollIntoView({ behavior: 'smooth' });
-  }
-};
+  const handlePhoneChange = (e) => {
+    const value = e.target.value.replace(/[^\d]/g, '');
+    setPhoneNumber(value);
+    validatePhone(value);
+    if (selectedRole) {
+      const assistantSelect = document.getElementById('assistant-select');
+      assistantSelect.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
-const handleRoleSelect = (role) => {
-  setSelectedRole(role.id);
+  const validatePhone = (number) => {
+    if (number.length < 8) {
+      setError('El número debe tener al menos 8 dígitos');
+    } else if (number.length > 15) {
+      setError('El número no debe exceder 15 dígitos');
+    } else {
+      setError('');
+    }
+  };
 
-  scroller.scrollTo('assistant-select', {
-    duration: 500,
-    delay: 100,
-    smooth: true,
-  });
-};
+  return (
+    <div className="w-full max-w-2xl p-6 bg-white rounded-2xl shadow-xl">
+      <h1 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 mb-6 text-center">
+        Contrata tu Asistente
+      </h1>
 
-const validatePhone = (number) => {
-  if (number.length < 8) {
-    setError('El número debe tener al menos 8 dígitos');
-  } else if (number.length > 15) {
-    setError('El número no debe exceder 15 dígitos');
-  } else {
-    setError('');
-  }
-};
-
-return (
-  <div className="w-full max-w-2xl p-6 bg-white rounded-2xl shadow-xl">
-    <h1 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 mb-6 text-center">
-      Contrata tu Asistente
-    </h1>
-
-    <div className="space-y-8">
+      <div className="space-y-8">
         {/* Sección de teléfono y nombre */}
         <div>
-            <label className="block text-lg font-medium text-gray-700 mb-4">
-                <div className="flex items-center gap-2">
-                    <Phone className="w-5 h-5 text-blue-500" />
-                    Pon tu Nombre y Número de teléfono
-                </div>
-                <span className="text-sm text-gray-500 block mt-1">
-                    El Asistente contratado se comunicará contigo
-                </span>
-            </label>
-
-            {/* Campo de Nombre */}
-            <div className="mb-4">
-                <input
-                    type="text"
-                    className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    placeholder="Ingresa tu Nombre"
-                    value={fullName}
-                    onChange={(e) => setFullName(e.target.value)}
-                />
+          <label className="block text-lg font-medium text-gray-700 mb-4">
+            <div className="flex items-center gap-2">
+              <Phone className="w-5 h-5 text-blue-500" />
+              Pon tu Nombre y Número de teléfono
             </div>
-            
-            {/* Campo de Teléfono con código de país */}
-            <div className="flex">
-                <div className="relative">
+            <span className="text-sm text-gray-500 block mt-1">
+              El Asistente contratado se comunicará contigo
+            </span>
+          </label>
+
+          {/* Campo de Nombre */}
+          <div className="mb-4">
+            <input
+              type="text"
+              className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              placeholder="Ingresa tu Nombre"
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
+            />
+          </div>
+
+          {/* Campo de Teléfono con código de país */}
+          <div className="flex">
+            <div className="relative">
+              <button
+                type="button"
+                className="flex items-center space-x-2 px-3 py-2 border rounded-l-lg bg-white hover:bg-gray-50"
+                onClick={() => setIsOpen(!isOpen)}
+                title={selectedCountry.country}
+              >
+                <div className="w-6 h-4">{selectedCountry.flag}</div>
+                <span className="font-medium">{selectedCountry.acronym}</span>
+                <span className="text-sm text-gray-600">{selectedCountry.code}</span>
+                <ChevronDown className="w-4 h-4 text-gray-400" />
+              </button>
+
+              {isOpen && (
+                <div className="absolute z-10 w-auto mt-1 bg-white border rounded-lg shadow-lg max-h-60 overflow-auto min-w-[160px]">
+                  {countryCodes.map((country) => (
                     <button
-                        type="button"
-                        className="flex items-center space-x-2 px-3 py-2 border rounded-l-lg bg-white hover:bg-gray-50"
-                        onClick={() => setIsOpen(!isOpen)}
-                        title={selectedCountry.country}
+                      key={country.code}
+                      className="w-full text-left px-3 py-2 hover:bg-gray-100 flex items-center space-x-3"
+                      onClick={() => {
+                        setSelectedCountry(country);
+                        setIsOpen(false);
+                      }}
+                      title={country.country}
                     >
-                        <div className="w-6 h-4">
-                            {selectedCountry.flag}
-                        </div>
-                        <span className="font-medium">{selectedCountry.acronym}</span>
-                        <span className="text-sm text-gray-600">{selectedCountry.code}</span>
-                        <ChevronDown className="w-4 h-4 text-gray-400" />
+                      <div className="w-6 h-4">{country.flag}</div>
+                      <span className="font-medium">{country.acronym}</span>
+                      <span className="text-sm text-gray-600 ml-auto">{country.code}</span>
                     </button>
-                    
-                    {isOpen && (
-                        <div className="absolute z-10 w-auto mt-1 bg-white border rounded-lg shadow-lg max-h-60 overflow-auto min-w-[160px]">
-                            {countryCodes.map((country) => (
-                                <button
-                                    key={country.code}
-                                    className="w-full text-left px-3 py-2 hover:bg-gray-100 flex items-center space-x-3"
-                                    onClick={() => {
-                                        setSelectedCountry(country);
-                                        setIsOpen(false);
-                                    }}
-                                    title={country.country}
-                                >
-                                    <div className="w-6 h-4">
-                                        {country.flag}
-                                    </div>
-                                    <span className="font-medium">{country.acronym}</span>
-                                    <span className="text-sm text-gray-600 ml-auto">{country.code}</span>
-                                </button>
-                            ))}
-                        </div>
-                    )}
+                  ))}
                 </div>
-
-                <input
-                    type="tel"
-                    className="flex-1 px-3 py-2 border-l-0 border rounded-r-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    placeholder="Ingresa tu Número"
-                    value={phoneNumber}
-                    onChange={handlePhoneChange}
-                />
+              )}
             </div>
 
-            {error && (
-                <p className="mt-2 text-sm text-red-600">
-                    {error}
-                </p>
-            )}
+            <input
+              type="tel"
+              className="flex-1 px-3 py-2 border-l-0 border rounded-r-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              placeholder="Ingresa tu Número"
+              value={phoneNumber}
+              onChange={handlePhoneChange}
+            />
+          </div>
+
+          {error && (
+            <p className="mt-2 text-sm text-red-600">{error}</p>
+          )}
         </div>
 
         {/* Sección de roles */}
         <div>
-            <h2 className="text-2xl font-semibold text-gray-800 mb-4">
-                Elige el Rol
-            </h2>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {roles.map((role) => (
-                    <button
-                        key={role.id}
-                        onClick={() => handleRoleSelect(role)}
-                        className={`p-6 rounded-xl border-2 transition-all duration-300 ${
-                            selectedRole === role.id
-                                ? 'border-blue-500 bg-blue-50'
-                                : 'border-gray-200 hover:border-blue-300 hover:bg-gray-50'
-                        }`}
-                    >
-                        <div className="flex flex-col items-center text-center space-y-3">
-                            {role.icon}
-                            <h3 className="font-semibold text-lg">{role.title}</h3>
-                            <p className="text-sm text-gray-600">{role.description}</p>
-                        </div>
-                    </button>
-                ))}
-            </div>
+          <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+            Elige el Rol
+          </h2>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {roles.map((role) => (
+              <button
+                key={role.id}
+                onClick={() => handleRoleSelect(role)}
+                className={`p-6 rounded-xl border-2 transition-all duration-300 ${
+                  selectedRole === role.id
+                    ? 'border-blue-500 bg-blue-50'
+                    : 'border-gray-200 hover:border-blue-300 hover:bg-gray-50'
+                }`}
+              >
+                <div className="flex flex-col items-center text-center space-y-3">
+                  {role.icon}
+                  <h3 className="font-semibold text-lg">{role.title}</h3>
+                  <p className="text-sm text-gray-600">{role.description}</p>
+                </div>
+              </button>
+            ))}
+          </div>
         </div>
 
         {selectedRole && (
-            <div ref={assistantSelectRef} name="assistant-select" className="mt-8">
-                <h2 className="text-2xl font-semibold text-gray-800 mb-4">
-                    Selecciona tu Asistente
-                </h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {employeeAvatars
-                        .filter((employee) => {
-                            switch(selectedRole) {
-                                case 'sales':
-                                    return employee.id.startsWith('s');
-                                case 'support':
-                                    return employee.id.startsWith('t');
-                                case 'customer':
-                                    return employee.id.startsWith('c');
-                                default:
-                                    return false;
-                            }
-                        })
-                        .map((employee) => (
-                            <button
-                                key={employee.id}
-                                onClick={() => setSelectedEmployee(employee.id)}
-                                className={`relative p-4 rounded-xl border-2 transition-all duration-300 ${
-                                    selectedEmployee === employee.id
-                                        ? 'border-blue-500 bg-blue-50'
-                                        : 'border-gray-200 hover:border-blue-300'
-                                }`}
-                            >
-                                <div className="flex flex-col items-center space-y-4">
-                                    <img 
-                                        src={employee.photo}
-                                        alt={employee.name}
-                                        className="w-32 h-32 object-cover rounded-full"
-                                    />
-                                    <div className="text-center">
-                                        <h3 className="font-semibold text-xl mb-1">{employee.name}</h3>
-                                        <p className="text-sm text-gray-600 font-medium">{employee.speciality}</p>
-                                        <p className="text-sm text-gray-500">{employee.experience} de experiencia</p>
-                                    </div>
-                                </div>
-                            </button>
-                        ))}
-                </div>
+          <div ref={assistantSelectRef} name="assistant-select" className="mt-8">
+            <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+              Selecciona tu Asistente
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {employeeAvatars
+                .filter((employee) => {
+                  switch (selectedRole) {
+                    case 'sales':
+                      return employee.id.startsWith('s');
+                    case 'support':
+                      return employee.id.startsWith('t');
+                    case 'customer':
+                      return employee.id.startsWith('c');
+                    default:
+                      return false;
+                  }
+                })
+                .map((employee) => (
+                  <button
+                    key={employee.id}
+                    onClick={() => setSelectedEmployee(employee.id)}
+                    className={`relative p-4 rounded-xl border-2 transition-all duration-300 ${
+                      selectedEmployee === employee.id
+                        ? 'border-blue-500 bg-blue-50'
+                        : 'border-gray-200 hover:border-blue-300'
+                    }`}
+                  >
+                    <div className="flex flex-col items-center space-y-4">
+                      <img
+                        src={employee.photo}
+                        alt={employee.name}
+                        className="w-32 h-32 object-cover rounded-full"
+                      />
+                      <div className="text-center">
+                        <h3 className="font-semibold text-xl mb-1">{employee.name}</h3>
+                        <p className="text-sm text-gray-600 font-medium">{employee.speciality}</p>
+                        <p className="text-sm text-gray-500">{employee.experience} de experiencia</p>
+                      </div>
+                    </div>
+                  </button>
+                ))}
             </div>
+          </div>
         )}
 
         {/* Botón de acción */}
         <button
-            className="w-full py-3 px-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl font-semibold text-lg hover:opacity-90 transition-opacity disabled:opacity-50"
-            disabled={!fullName || !phoneNumber || !selectedRole || !selectedEmployee || error}
+          className="w-full py-3 px-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl font-semibold text-lg hover:opacity-90 transition-opacity disabled:opacity-50"
+          disabled={!fullName || !phoneNumber || !selectedRole || !selectedEmployee || error}
         >
-            Contratar Asistente
+          Contratar Asistente
         </button>
       </div>
     </div>
