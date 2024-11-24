@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ChevronDown, Phone, HeadsetIcon, Users2, ShoppingBag } from 'lucide-react';
 // import { DiegoAvatar } from './avatars/DiegoAvatar';
+import { useEffect } from 'react';
 import { scroller } from 'react-scroll';
 
 
@@ -201,6 +202,22 @@ const [isOpen, setIsOpen] = useState(false);
 const [error, setError] = useState('');
 const [selectedRole, setSelectedRole] = useState(null);
 const [selectedEmployee, setSelectedEmployee] = useState(null);
+const [hasSelectedRole, setHasSelectedRole] = useState(false);
+
+useEffect(() => {
+  if (hasSelectedRole) {
+    scroller.scrollTo('assistant-select', {
+      duration: 500,
+      delay: 100,
+      smooth: true,
+    });
+  }
+}, [hasSelectedRole]);
+
+const handleRoleSelect = (role) => {
+  setSelectedRole(role.id);
+  setHasSelectedRole(true);
+};
 
 const handlePhoneChange = (e) => {
   const value = e.target.value.replace(/[^\d]/g, '');
