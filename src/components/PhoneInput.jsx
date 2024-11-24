@@ -204,6 +204,18 @@ const handlePhoneChange = (e) => {
   const value = e.target.value.replace(/[^\d]/g, '');
   setPhoneNumber(value);
   validatePhone(value);
+  if (selectedRole) {
+    const assistantSelect = document.getElementById('assistant-select');
+    assistantSelect.scrollIntoView({ behavior: 'smooth' });
+  }
+};
+
+const handleRoleSelect = (role) => {
+  setSelectedRole(role.id);
+
+  // Mover el scroll a la sección de selección de asistente
+  const assistantSelect = document.getElementById('assistant-select');
+  assistantSelect.scrollIntoView({ behavior: 'smooth' });
 };
 
 const validatePhone = (number) => {
@@ -312,7 +324,7 @@ return (
                 {roles.map((role) => (
                     <button
                         key={role.id}
-                        onClick={() => setSelectedRole(role.id)}
+                        onClick={() => handleRoleSelect(role)}
                         className={`p-6 rounded-xl border-2 transition-all duration-300 ${
                             selectedRole === role.id
                                 ? 'border-blue-500 bg-blue-50'
