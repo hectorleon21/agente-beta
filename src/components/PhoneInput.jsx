@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { ChevronDown, Phone, HeadsetIcon, Users2, ShoppingBag } from 'lucide-react';
-import { DiegoAvatar } from './avatars/DiegoAvatar';
+// import { DiegoAvatar } from './avatars/DiegoAvatar';
+import { scroller } from 'react-scroll';
+
 
 const countryCodes = [
   // América del Sur
@@ -213,9 +215,11 @@ const handlePhoneChange = (e) => {
 const handleRoleSelect = (role) => {
   setSelectedRole(role.id);
 
-  // Mover el scroll a la sección de selección de asistente
-  const assistantSelect = document.getElementById('assistant-select');
-  assistantSelect.scrollIntoView({ behavior: 'smooth' });
+  scroller.scrollTo('assistant-select', {
+    duration: 500,
+    delay: 100,
+    smooth: true,
+  });
 };
 
 const validatePhone = (number) => {
@@ -342,7 +346,7 @@ return (
         </div>
 
         {selectedRole && (
-            <div className="mt-8">
+            <div name="assistant-select" className="mt-8">
                 <h2 className="text-2xl font-semibold text-gray-800 mb-4">
                     Selecciona tu Asistente
                 </h2>
