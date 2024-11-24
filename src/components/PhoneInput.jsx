@@ -203,13 +203,13 @@ const [error, setError] = useState('');
 const [selectedRole, setSelectedRole] = useState(null);
 const [selectedEmployee, setSelectedEmployee] = useState(null);
 const [hasSelectedRole, setHasSelectedRole] = useState(false);
+const assistantSelectRef = useRef(null);
 
 useEffect(() => {
-  if (hasSelectedRole) {
-    scroller.scrollTo('assistant-select', {
-      duration: 500,
-      delay: 100,
-      smooth: true,
+  if (hasSelectedRole && assistantSelectRef.current) {
+    assistantSelectRef.current.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start',
     });
   }
 }, [hasSelectedRole]);
@@ -363,7 +363,7 @@ return (
         </div>
 
         {selectedRole && (
-            <div name="assistant-select" className="mt-8">
+            <div ref={assistantSelectRef} name="assistant-select" className="mt-8">
                 <h2 className="text-2xl font-semibold text-gray-800 mb-4">
                     Selecciona tu Asistente
                 </h2>
