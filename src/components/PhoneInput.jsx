@@ -149,14 +149,14 @@ const employeeAvatars = [
     id: 's1',
     name: 'Diego',
     experience: '5 años',
-    photo: '/src/assets/avatars/diego.jpg',
+    photo: '/avatars/diego.jpg',
     speciality: 'Ventas B2B'
   },
   {
     id: 's2',
     name: 'Lucía',
     experience: '4 años',
-    photo: '/src/assets/avatars/lucia.jpg',
+    photo: '/avatars/lucia.jpg',
     speciality: 'Ventas Consultivas'
   },
   // Soporte Técnico
@@ -164,14 +164,14 @@ const employeeAvatars = [
     id: 't1',
     name: 'Manuel',
     experience: '3 años',
-    photo: '/src/assets/avatars/manuel.jpg',
+    photo: '/avatars/manuel.jpg',
     speciality: 'Software & Apps'
   },
   {
     id: 't2',
     name: 'Carmen',
     experience: '5 años',
-    photo: '/src/assets/avatars/carmen.jpg',
+    photo: '/avatars/carmen.jpg',
     speciality: 'Redes & Sistemas'
   },
   // Analista Documental
@@ -179,14 +179,14 @@ const employeeAvatars = [
     id: 'c1',
     name: 'Isabel',
     experience: '4 años',
-    photo: '/src/assets/avatars/isabel.jpg',
+    photo: '/avatars/isabel.jpg',
     speciality: 'Análisis de Contratos'
   },
   {
     id: 'c2',
     name: 'Miguel',
     experience: '3 años',
-    photo: '/src/assets/avatars/miguel.jpg',
+    photo: '/avatars/miguel.jpg',
     speciality: 'Gestión Documental'
   }
 ];
