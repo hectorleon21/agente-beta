@@ -1,0 +1,1 @@
+export { DiegoAvatar } from './DiegoAvatar';
